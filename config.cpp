@@ -282,6 +282,7 @@ void Config::CreateConfig(const std::string &configFilePath) {
         configJson["statBar"]["position"]["y"] = 10;
         configJson["statBar"]["size"]["width"] = barSize.width;
         configJson["statBar"]["size"]["height"] = barSize.height;
+        configJson["statBar"]["iconSize"] = 68;
         configJson["statBar"]["hideText"] = false;
 
         configJson["effectBar"]["position"]["x"] = gGameWindowSize.width - barSize.width - 3;
