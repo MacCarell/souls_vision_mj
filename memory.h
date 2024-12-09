@@ -4,8 +4,9 @@
 
 #ifndef SOULS_VISION_MEMORY_H
 #define SOULS_VISION_MEMORY_H
-#include <windows.h>
+#define NOMINMAX
 #include <string>
+#include <windows.h>
 
 namespace souls_vision {
 
