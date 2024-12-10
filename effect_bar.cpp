@@ -70,7 +70,7 @@ namespace souls_vision {
                 ? paddingY
                 : paddingY + barSize.y * .5f - iconSize * .5f
         );
-        float barXOffset = barSize.x * .01;
+        float barXOffset = barSize.x * .01f;
         ImVec2 barPosition = ImVec2(
             iconPosition.x + iconSize - barXOffset,
             iconSize > barSize.y
