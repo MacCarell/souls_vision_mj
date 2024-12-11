@@ -13,6 +13,7 @@
 #include "stb_image.h"
 #include "config.h"
 #include "util.h"
+#include "memory.h"
 #include "resources.h"
 
 #include <string>
@@ -485,9 +486,7 @@ void Overlay::DrawStatBars(ID3D12Device* device) {
     float dmgTypesWidth = Config::dmgTypeIconSize.x * (float)maxDamageIconRowSize * 1.05f;
     float windowWidth = Config::statBarSettings.size.x + dmgTypesWidth;
     ImVec2 windowPosition = Config::statBarSettings.position;
-    if (gRendered) {
-        windowPosition.x -= dmgTypesWidth;
-    }
+    windowPosition.x -= dmgTypesWidth;
 
     float statBarsHeight = (Config::statBarSettings.size.y + Config::statBarSpacing) * (float)statBarsToRender.size();
     float bestEffectHeight = 0;
@@ -501,17 +500,23 @@ void Overlay::DrawStatBars(ID3D12Device* device) {
             windowWidth,
             statBarsHeight + bestEffectHeight + effectBarsHeight
     );
-    ImGui::SetNextWindowPos(windowPosition, ImGuiCond_Once);
+    if (Config::dragOverlay) {
+        ImGui::SetNextWindowPos(windowPosition, ImGuiCond_Once);
+    } else {
+        ImGui::SetNextWindowPos(windowPosition);
+    }
     ImGui::SetNextWindowSize(ImVec2(windowSize.x, windowSize.y));
 
-    static ImVec2 previousPosition = Config::statBarSettings.position;
+    static ImVec2 previousPosition = windowPosition;
 
     if (!ImGui::Begin("Stat Window", nullptr, windowFlags)) {
         return;
     }
     if (Config::configUpdated) {
-        ImGui::SetWindowPos(Config::statBarSettings.position);
-        previousPosition = Config::statBarSettings.position;
+        ImVec2 newPosition = Config::statBarSettings.position;
+        newPosition.x -= dmgTypesWidth;
+        ImGui::SetWindowPos(newPosition);
+        previousPosition = newPosition;
         Config::configUpdated = false;
     }
 
@@ -519,6 +524,7 @@ void Overlay::DrawStatBars(ID3D12Device* device) {
 
     if (Config::dragOverlay && (currentPosition.x != previousPosition.x || currentPosition.y != previousPosition.y)) {
         Config::statBarSettings.position = currentPosition;
+        Config::statBarSettings.position.x += dmgTypesWidth;
         previousPosition = currentPosition;
         Config::SaveConfig(gConfigFilePath);
     }
@@ -697,8 +703,6 @@ void Overlay::DrawStatBars(ID3D12Device* device) {
     ImGui::End();
 
     ImGui::PopStyleVar();
-
-    gRendered = true;
 }
 
 void Overlay::RenderTargets(IDXGISwapChain3 *pSwapChain) {
