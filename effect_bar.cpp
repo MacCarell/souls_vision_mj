@@ -162,8 +162,6 @@ namespace souls_vision {
         /*
          * Text
          */
-        ImGui::SetCursorPos(iconPosition);
-        ImGui::Image(iconTexID, ImVec2(iconSize, iconSize));;
         if (!barSettings.hideText) {
             ImGui::PushFont(Overlay::font_);
             std::string text = std::format("{:.{}f} / {:.{}f}", barSettings.currentValue, decimals,
@@ -179,5 +177,11 @@ namespace souls_vision {
 
             ImGui::PopFont();
         }
+
+        /*
+         * Icon
+         */
+        ImGui::SetCursorPos(iconPosition);
+        ImGui::Image(iconTexID, ImVec2(iconSize, iconSize));
     }
 } // souls_vision

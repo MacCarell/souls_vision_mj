@@ -2,7 +2,7 @@
 // Created by PC-SAMUEL on 22/11/2024.
 //
 
-#define _CRT_SECURE_NO_WARNINGS
+#define CRT_SECURE_NO_WARNINGS
 #define STB_IMAGE_IMPLEMENTATION
 #define NOMINMAX
 #include "overlay.h"
@@ -419,8 +419,8 @@ void Overlay::DrawStatBars(ID3D12Device* device) {
             | std::views::transform([](const std::pair<std::string, float>& pair) { return pair; })
             | std::ranges::to<std::vector>();
 
-    int maxDamageIconRowSize = std::max(static_cast<int>(bestDmgTypes.size()), static_cast<int>(worseDmgTypes.size()));
-    maxDamageIconRowSize = std::max(maxDamageIconRowSize, static_cast<int>(neutralDmgTypes.size()));
+    int maxDamageIconRowSize = std::max((int)bestDmgTypes.size(), (int)worseDmgTypes.size());
+    maxDamageIconRowSize = std::max(maxDamageIconRowSize, (int)neutralDmgTypes.size());
 
     std::vector<BarType> immuneEffects = effectBars_
             | std::views::filter([&targetChrIns](const EffectBar& bar) { return GetTargetMaxValue(bar.type, targetChrIns) >= 999; })
